@@ -1,0 +1,222 @@
+Taller 3 Parte 2
+
+Sharon Nicole Barbosa Silva
+
+[34]
+7 s
+import pandas as pd
+from datascience import *
+import numpy as np
+
+%matplotlib inline
+import matplotlib.pyplot as plots
+plots.style.use('fivethirtyeight')
+
+import seaborn as sns
+import scipy.stats
+from scipy.stats import norm
+import warnings
+warnings.simplefilter("ignore")
+
+!pip install fitter
+from fitter import Fitter, get_common_distributions, get_distributions
+Collecting fitter
+  Downloading fitter-1.4.0.tar.gz (27 kB)
+Collecting easydev
+  Downloading easydev-0.12.0.tar.gz (47 kB)
+     |████████████████████████████████| 47 kB 3.1 MB/s 
+Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (from fitter) (1.21.6)
+Requirement already satisfied: matplotlib in /usr/local/lib/python3.7/dist-packages (from fitter) (3.2.2)
+Requirement already satisfied: scipy>=0.18 in /usr/local/lib/python3.7/dist-packages (from fitter) (1.4.1)
+Requirement already satisfied: pandas in /usr/local/lib/python3.7/dist-packages (from fitter) (1.3.5)
+Requirement already satisfied: click in /usr/local/lib/python3.7/dist-packages (from fitter) (7.1.2)
+Requirement already satisfied: joblib in /usr/local/lib/python3.7/dist-packages (from fitter) (1.1.0)
+Collecting colorama
+  Downloading colorama-0.4.4-py2.py3-none-any.whl (16 kB)
+Requirement already satisfied: pexpect in /usr/local/lib/python3.7/dist-packages (from easydev->fitter) (4.8.0)
+Collecting colorlog
+  Downloading colorlog-6.6.0-py2.py3-none-any.whl (11 kB)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib->fitter) (3.0.8)
+Requirement already satisfied: python-dateutil>=2.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib->fitter) (2.8.2)
+Requirement already satisfied: kiwisolver>=1.0.1 in /usr/local/lib/python3.7/dist-packages (from matplotlib->fitter) (1.4.2)
+Requirement already satisfied: cycler>=0.10 in /usr/local/lib/python3.7/dist-packages (from matplotlib->fitter) (0.11.0)
+Requirement already satisfied: typing-extensions in /usr/local/lib/python3.7/dist-packages (from kiwisolver>=1.0.1->matplotlib->fitter) (4.2.0)
+Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.7/dist-packages (from python-dateutil>=2.1->matplotlib->fitter) (1.15.0)
+Requirement already satisfied: pytz>=2017.3 in /usr/local/lib/python3.7/dist-packages (from pandas->fitter) (2022.1)
+Requirement already satisfied: ptyprocess>=0.5 in /usr/local/lib/python3.7/dist-packages (from pexpect->easydev->fitter) (0.7.0)
+Building wheels for collected packages: fitter, easydev
+  Building wheel for fitter (setup.py) ... done
+  Created wheel for fitter: filename=fitter-1.4.0-py3-none-any.whl size=25026 sha256=c0ae52c549f513f374e361d4c6102745a31976721f9c0743dde62357d6fe97d7
+  Stored in directory: /root/.cache/pip/wheels/e1/98/16/e5263962f94fbfaad79902aa94652516caccc1f1d51509e853
+  Building wheel for easydev (setup.py) ... done
+  Created wheel for easydev: filename=easydev-0.12.0-py3-none-any.whl size=64232 sha256=bbf44a099de28908f6ec47a6d6fe3eb64263dfe3b6b42c690dd465685b84b1a0
+  Stored in directory: /root/.cache/pip/wheels/82/ab/83/fdfc4017ea44a585b6754752cc5f63f2d0d63fcc1317e7174b
+Successfully built fitter easydev
+Installing collected packages: colorlog, colorama, easydev, fitter
+Successfully installed colorama-0.4.4 colorlog-6.6.0 easydev-0.12.0 fitter-1.4.0
+PARTE UNO
+
+[41]
+0 s
+df = pd.read_csv('bankloans.csv')
+df = df.drop(['age', 'ed', 'employ', 'address', 'debtinc', 'creddebt', 'othdebt', 'default'], axis=1)
+df
+
+[42]
+0 s
+df.describe()
+
+[70]
+2 s
+df1 = Fitter(df, distributions= get_common_distributions())
+df1.fit()
+[71]
+1 s
+df1.summary()
+
+[63]
+0 s
+data = pd.read_csv('Oil and Gas 1932-2014.csv')
+data = data.iloc[2824:2905,[5]]
+data = data.dropna()
+data
+
+[64]
+0 s
+data.describe()
+
+[72]
+1 s
+data1 = Fitter(data, distributions= get_common_distributions())
+data1.fit()
+[73]
+1 s
+data1.summary()
+
+[67]
+0 s
+dataf = pd.read_excel('Inflación.xlsx')
+dataf = dataf.sort_values('Año(aaaa)-Mes(mm)')
+dataf = dataf.iloc[:,[1]]
+dataf
+
+[69]
+0 s
+dataf.describe()
+
+[74]
+1 s
+dataf1 = Fitter(dataf, distributions= get_common_distributions())
+dataf1.fit()
+[75]
+1 s
+dataf1.summary()
+
+[78]
+0 s
+dataframe = pd.read_excel('Tasa de Interés.xlsx')
+dataframe = dataframe.sort_values('Fecha (dd/mm/aaaa)')
+dataframe = dataframe.iloc[:,[1]]
+dataframe
+
+[77]
+0 s
+dataframe.describe()
+
+PARTE DOS
+
+Una empresa planea introducir un nuevo producto al mercado. Para estimar la utilidad neta del primer año de este producto (sin considerar impuestos, depreciaciones, ni pago de intereses), se tienen los siguientes componentes:
+
+Volumen de ventas (unidades)
+Precio por unidad (precio de venta)
+Costo unitario
+Costos fijos
+Los costos fijos (como gastos generales, arriendo, servicios, etc.) se estiman en $120.000 y se asume que son determinísticos. Las demás variables involucran cierta incertidumbre: i) el volumen de ventas (en unidades) puede cambiar en un rango amplio que depende del grado de aceptación del producto y de la competencia; ii) el precio de venta por unidad dependerá de las acciones que emprenda la competencia y; iii) los costos unitarios también variarán según los precios de los proveedores y de las interacciones del mercado. Además, se asume que todas estas variables son independientes.
+
+Según el estudio de mercado se cree que se pueden encontrar tres estados diferentes: mercado bajo, normal y alto. En un mercado “bajo” se espera vender 50.000 unidades a un precio promedio de 11porunidad.Enunmercado"normal"seesperavender75.000unidades,peroaunpreciomásbajode10 por unidad. En un mercado "alto" se espera vender 100.000 unidades, pero esto atraerá otros competidores, que reducirán el precio de venta a 8porunidad.Loscostosunitariospuedenoscilarentre 5,50 y $ 7,50, con igual probabilidad de ocurrencia.
+
+A partir de esta información, calcule:
+
+el valor esperado de utilidad neta del primer año.
+
+la probabilidad de encontrar una utilidad neta negativa.
+
+[21]
+0 s
+#Variables 
+
+CostoF = 120000
+[18]
+0 s
+# Distribución Beta PERT: 
+def betapert(a, b, c, *, size=1, lamb=4):
+    d = c - a
+    alpha = 1 + lamb * (b - a) / d
+    beta = 1 + lamb * (c - b) / d
+    return a + np.random.beta(alpha, beta, size=size) * d
+Cantidades = betapert(50000, 75000, 100000, size=10000)
+pd.Series(cantidad).hist(bins=30);
+
+[17]
+0 s
+def betapert(a, b, c, *, size=1, lamb=4):
+    d = c - a
+    alpha = 1 + lamb * (b - a) / d
+    beta = 1 + lamb * (c - b) / d
+    return a + np.random.beta(alpha, beta, size=size) * d
+
+PrecioU = betapert(8, 10, 11, size=10000)
+pd.Series(precio).hist(bins=50);
+
+[28]
+0 s
+Costos = np.random.uniform(5.5,7.5, 10000)
+pd.Series(Costos).hist(bins=30);
+
+[19]
+0 s
+#Ventas 
+Ingreso = PrecioU*Cantidades
+pd.Series(Ingreso).hist(bins= 50)
+
+[30]
+0 s
+UNeta = (PrecioU)*Cantidades-Cantidades*(Costos)-CostoF
+pd.Series(UNeta)
+0        42952.648313
+1       158421.604057
+2       157601.276315
+3        79219.760934
+4       159007.355499
+            ...      
+9995     45097.621525
+9996    129379.400641
+9997    244087.289831
+9998    121505.418408
+9999    102560.609869
+Length: 10000, dtype: float64
+[36]
+4 s
+UN = Fitter(UNeta, distributions= get_common_distributions())
+UN.fit()
+[37]
+0 s
+UN.summary()
+
+[31]
+0 s
+pd.Series(UNeta).hist()
+UNeta.mean()
+
+La utilidad neta esperada para el primer año de ventas es $130.360.
+
+[38]
+K= 0
+Stsup = pd.DataFrame(UNeta) < K
+Stsup.value_counts()
+False    9796
+True      204
+dtype: int64
+Hay una probabilidad de obtener una utilidad negativa de 2,04%.
+
+
